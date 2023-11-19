@@ -1,0 +1,34 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>LAMP Stack</title>
+</head>
+
+<body>
+    <h1>LAMP Stack</h1>
+    <div id="apiData"><h2> USER DATA </h2> 
+            <ul>
+            <li>Name: Aksel Røe</li>
+            <li>Location: Norway  </li>
+            <li>Age: 26</li>
+            <li>Latitude: 44.1927</li>
+            <li>Longitude: -103.6983</li>
+          </ul></div>
+ 
+    <div id="btns">
+        <button id="getBtn" class="btn">Get Another</button>
+        <form action="php/formexample.php" method="post" style="display:inline;" id="formdata"><input type="hidden" name="first" value="Aksel">
+  <input type="hidden" name="last" value="Røe">
+  <input type="hidden" name="country" value="Norway">
+  <input type="hidden" name="age" value="26">
+  <input type="hidden" name="latitude" value="44.1927">
+  <input type="hidden" name="longitude" value="-103.6983">
+  
+  <input type="submit" id="addBtn" class="btn" value="Add This One"></form>
+    </div>
+
+
+    <script src="js/app.js"></script>
+</body></html>
