@@ -12,12 +12,41 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+//Server database
+// const dbConfig = {
+//     host: "localhost",
+//     user: "user84",
+//     password: "84adle",
+//     database: "db84"
+// };
+
 const dbConfig = {
     host: "localhost",
-    user: "user84",
-    password: "84adle",
+    user: "root",
+    password: "mysql",
     database: "db84"
 };
+
+
+const redisclient = redis.createClient(); 
+  
+(async () => { 
+    await redisclient.connect(); 
+})(); 
+  
+console.log("Connecting to the Redis"); 
+  
+redisclient.on("ready", () => { 
+    console.log("Connected!"); 
+}); 
+  
+redisclient.on("error", (err) => { 
+    console.log("Error in the Connection"); 
+}); 
+
+
+
+
 const pool = mysql.createPool(dbConfig);
 app.post('/submit', (req, res) => {
     // Access form data from the request body
@@ -56,7 +85,21 @@ app.post('/submit', (req, res) => {
                 }
 
                 // Respond to the client with the data
-                res.send(`
+                 console.log(selectResult);
+		async function nodeRedis() {
+ 		try {
+		for (let i = 0; i<selectResult.length; i++){
+			await redisclient.set(selectResult[i].first, selectResult[i].last);
+			}
+    		await redisclient.set('mykey', 'Hello from node redis');
+    		const myKeyValue = await redisclient.get('mykey');
+		await redisclient.quit();
+} catch (e) {
+    console.error(e);
+  }
+} nodeRedis();
+
+		 res.send(`
                     <!DOCTYPE html>
                     <html lang="en">
                     <body>
