@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style/style.css">
+  <title>Final Project</title>
+</head>
+<body>
+    <h1>CSCI 331 Redis</h1>
+
+    <div id="apiData">
+        <img class="user" id="userPicture" src="" alt="rando user">
+        <h2 class="user" id="userName"> Meet <p id="firstName"></p><p id="lastName"></p></h2>
+        <ul id="userData">
+            <li id="location">Location:</li>
+            <li id="age">Age:</li>
+            <li id="latitude">Latitude:</li>
+            <li id="longitude">Longitude:</li>
+        </ul>
+    </div>
+ 
+    <div id="btns">
+        <button id="getBtn" class="btn">Get Another</button>
+        <button id="insertbutton">Add This One</button>
+        <button id="flushButton">Flush Cash</button>
+        <button id="selectButton">Select All Data</button>
+        <!-- <button id="deleteButton">Delete Search Item</button> -->
+        <input type="text" id="searchInput" placeholder="Search by First Name">
+    </div>
+
+    <h2 id="dataBaseTime">Processing Time: </h2>
+
+    <table id="dataTable">
+        <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <!-- Add more columns as needed -->
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+  <script>
+    const apiButton = document.getElementById("getBtn")
+    const insertbutton = document.getElementById("insertbutton")
+    const debug = document.getElementById("debug")
+
+    
+    const userPicture = document.getElementById("userPicture")
+    const userName = document.getElementById("userName")
+
+    const firstName = document.getElementById("firstName")
+    const lastName = document.getElementById("lastName")
+
+
+    const userLocation = document.getElementById("location")
+    const userAge = document.getElementById("age")
+    const userLatitude = document.getElementById("latitude")
+    const userLongitude = document.getElementById("longitude")
+
+    let url = "https://randomuser.me/api"
+
+    const timeDisply = document.getElementById("dataBaseTime") 
+
+    apiButton.addEventListener("click", getUser)
+
+    getUser()
+
+    function getUser() {
+            // fetch returns a promise: pending until it resolves to a response object                    
+        fetch(url)
+            // now the promise is settled and we we have a response object
+            // next: send the settled response as an argument to the next callback 
+        .then(decodeData)
+
+        .then(success, fail);
+            // if only one argument, catch handles rejected promise
+        //.then(success)                                          
+        //.catch(fail)
+    }
+
+    function decodeData(response) {     // take the response object as a parameter
+        // return (response.json())
+        if (response.ok) {              // 200 - 299 is true (200 is success)
+            // apiData.innerHTML = "response is " + response.status;
+            return (response.json())    // returns promise that resolves to result of parsing as JSON
+        }
+        else
+            throw response.status      // throw an error: the response code
+    }
+
+    function isEnglish(text) {
+    // Regular expression to match English characters
+    const englishRegex = /^[A-Za-z]+$/;
+
+    // Test if the text contains only English characters
+    return englishRegex.test(text);
+    }
+    
+
+    function success(userData) {
+        // A template literal is of the form `three plus four is ${ 3 + 4 }`
+    //   let fillHtml=listGenerate(userData);
+
+    const apiFirst = userData.results[0].name.first;
+    const apiLast = userData.results[0].name.last;
+
+
+    if(!isEnglish(apiFirst) || !isEnglish(apiLast)){
+        getUser()
+    }
+    else{
+
+        const apiCountry = userData.results[0].location.country;
+        const apiAge = userData.results[0].dob.age;
+        const apiLatitude = userData.results[0].location.coordinates.latitude;
+        const apiLongitude = userData.results[0].location.coordinates.longitude;
+        const picture = userData.results[0].picture.large
+
+
+        userPicture.src = picture
+
+        firstName.innerHTML = apiFirst + " "
+        lastName.innerHTML = apiLast
+
+        userLocation.innerHTML = "Location: " + apiCountry
+        userAge.innerHTML = "Age: " + apiAge
+        userLatitude.innerHTML = "Latitude: " + apiLatitude
+        userLongitude.innerHTML = "Longitude: " + apiLongitude        
+
+    }
+
+    }
+
+    function fail(error) {
+        apiData.innerHTML = "Something went wrong with parsing JSON."
+        mdnCodes = "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+        apiData.innerHTML+= `<br>The problem: <a href=${mdnCodes}>${error} Error</a>`
+    }
+
+    // database stuff -------------------------------------------------------------------
+
+    const flushButton = document.getElementById('flushButton');
+    const selectButton = document.getElementById('selectButton');
+
+    const searchInput = document.getElementById('searchInput');
+    const deleteButton = document.querySelector('deleteButton');
+    const dataTableBody = document.querySelector('#dataTable tbody');
+
+    // deleteButton.addEventListener('click', () => {
+    //     const searchValue = searchInput.value.trim();
+
+    //     // Check if the search input is empty
+    //     if (searchValue === '') {
+    //         console.log('Search input is empty. Delete operation skipped.');
+    //         return;
+    //     }
+        
+
+    //     // Send a request to the server with the search term
+    //     fetch(`http://localhost:3078/deleteDataBase?search=${searchValue}`, {
+    //         method: 'DELETE', // Use the DELETE method
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         console.log('Delete successful:', data);
+    //         // Optionally, update the table or perform any other actions
+    //         populateTable(data);
+    //     })
+    //     .catch(error => console.error('Error fetching or parsing data:', error));
+    // });
+
+
+
+    insertbutton.addEventListener('click', () => {
+        console.log(firstName.innerHTML, lastName.innerHTML)
+        // Create an object with the user data
+        const userDataObject = {
+            first: firstName.innerHTML,
+            last: lastName.innerHTML,
+        };
+
+        // Send a POST request to the server
+        fetch('http://localhost:3078/insertDataBase', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userDataObject),
+        })
+        .then(response => response.json())
+        .then(data => console.log('Insert successful:', data))
+        .catch(error => console.error('Error inserting data:', error));
+
+    });
+
+    searchInput.addEventListener('input', () => {
+        const searchValue = searchInput.value.trim();
+
+        // Send a request to the server with the search term
+        fetch(`http://localhost:3078/searchDataBase?search=${searchValue}`)
+            .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+            })
+            .then(data => populateTable(data))
+            .catch(error => console.error('Error fetching data:', error));
+    });
+
+    selectButton.addEventListener('click', () => {
+        fetch('http://localhost:3078/selectAllDataBase')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => populateTable(data))
+            .catch(error => console.error('Error fetching data:', error));
+    });
+
+
+    flushButton.addEventListener('click', () => {
+        fetch('http://localhost:3078/flushRedisCache', {
+            method: 'POST',
+        })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+            })
+            .then(data => {
+            console.log('Redis cache flushed successfully:', data.message);
+            })
+            .catch(error => console.error('Error flushing Redis cache:', error));
+    });
+
+
+    function populateTable(data) {
+        // Clear existing rows from the table
+        dataTableBody.innerHTML = '';
+
+        // Extract processing time
+        const processingTime = data.processingTime;
+
+        // Display processing time outside the table
+        const timeDisplay = document.getElementById("dataBaseTime");
+        timeDisplay.textContent = `Processing Time: ${processingTime !== undefined ? processingTime + ' ms' : 'N/A'}`;
+
+        // Loop through the data and create table rows
+        data.data.forEach(rowData => {
+            const row = document.createElement('tr');
+
+            const firstCell = document.createElement('td');
+            firstCell.textContent = rowData.first;
+            row.appendChild(firstCell);
+
+            const lastCell = document.createElement('td');
+            lastCell.textContent = rowData.last;
+            row.appendChild(lastCell);
+
+            // Add more cells as needed
+
+            // Append the row to the table body
+            dataTableBody.appendChild(row);
+        });
+    }
+
+
+
+
+    // redis stuff-----------------------------------------------------------------
+
+  </script>
+</body>
+</html>

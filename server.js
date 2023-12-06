@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const { exec } = require("child_process");
 const app = express();
-const port = 3084;
+const port = 3078;
 const redis = require('redis');
 
 const dir = `${__dirname}\\public\\`
@@ -22,9 +22,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const dbConfig = {
     host: "localhost",
-    user: "root",
-    password: "mysql",
-    database: "db84"
+    user: "user78",
+    password: "78find",
+    database: "db78"
 };
 
 
@@ -71,21 +71,22 @@ app.post('/submit', (req, res) => {
                 console.error("Error executing database query:", queryErr);
                 res.status(500).send("Internal Server Error");
                 return;
-            }
-
-            console.log("New record created successfully");
+            }           
 
             // Query to fetch data from the database
             const selectQuery = "SELECT first, last FROM randuser";
+            const startTimeMySQL = performance.now();
             connection.query(selectQuery, (selectErr, selectResult) => {
                 if (selectErr) {
                     console.error("Error executing select query:", selectErr);
                     res.status(500).send("Internal Server Error");
                     return;
                 }
+            
+            // Stop measuring time for MySQL retrieval
+            const endTimeMySQL = performance.now(); 
+            const elapsedTimeMySQL = (endTimeMySQL - startTimeMySQL).toFixed(3);
 
-                // Respond to the client with the data
-                 console.log(selectResult);
 		async function nodeRedis() {
  		try {
 		for (let i = 0; i<selectResult.length; i++){
@@ -99,14 +100,73 @@ app.post('/submit', (req, res) => {
   }
 } nodeRedis();
 
-		 res.send(`
+                res.send(`
                     <!DOCTYPE html>
                     <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Form Results</title>
+                        <style>
+                            body {
+                                font-family: 'Arial', sans-serif;
+                                background-color: #1e1e1e;
+                                color: #ffffff;
+                                margin: 20px;
+                            }
+
+                            h1 {
+                                color: #007bff;
+                            }
+
+                            p {
+                                margin-bottom: 10px;
+                            }
+
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 20px;
+                                background-color: #2c2c2c;
+                                color: #ffffff;
+                            }
+
+                            th, td {
+                                border: 1px solid #444;
+                                padding: 8px;
+                                text-align: left;
+                            }
+
+                            th {
+                                background-color: #007bff;
+                                color: #ffffff;
+                            }
+
+                            tr:nth-child(even) {
+                                background-color: #3c3c3c;
+                            }
+                        </style>
+                    </head>
                     <body>
                         <h1>Form Results</h1>
+                        <p>Time taken for MySQL select: ${elapsedTimeMySQL} milliseconds</p>
                         <p>New record created successfully</p>
-                        <p>First name         Last name</p>
-                        ${selectResult.map(row => `<p>${row.first}         ${row.last}</p>`).join('')}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>First name</th>
+                                    <th>Last name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${selectResult.map(row => `
+                                    <tr>
+                                        <td>${row.first}</td>
+                                        <td>${row.last}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
                     </body>
                     </html>
                 `);

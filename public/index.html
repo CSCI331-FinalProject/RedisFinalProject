@@ -2,18 +2,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LAMP Stack</title>
+    <link rel="stylesheet" href="css/main.css">
+    <title>Final Project</title>
 </head>
 
 <body>
-    <h1>LAMP Stack</h1>
-    <div id ='apiData'></div>
+    <h1>Redis Final Project</h1>
+
+    <div id="apiData">
+        <img class="user" src="images/questionMark.jpg" alt="rando user">
+        <h2 class="user"></h2>
+        <ul id="userData">
+            <li id="location">Location:</li>
+            <li id="age">Age:</li>
+            <li id="latitude">Latitude:</li>
+            <li id="longitude">Longitude:</li>
+        </ul>
+    </div>
  
     <div id="btns">
         <button id="getBtn" class="btn">Get Another</button>
-        <form action="/submit" method="post" style="display:inline;" id = 'formdata'>
-            
-  <input type="submit" id="addBtn" class="btn" value="Add This One"></form>
+        <input type="submit" id="addBtn" class="btn" value="Add This One">
+        
+    </div>
+
+    <div id="debug">
+        <p id="test"></p>
+
     </div>
 
 

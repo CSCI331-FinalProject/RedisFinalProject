@@ -1,0 +1,174 @@
+/* Reset styles */
+body, h1, h2, h3, p, div, form, button, input {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h1, h2 {
+    margin-top: 20px;
+    text-align: center;
+}
+
+img {
+    max-width: 100%; /* Ensure images don't exceed their original size */
+    height: auto; /* Maintain aspect ratio */
+    border: 5px solid #b30000; /* Red border around images */
+    border-radius: 10px; /* Rounded corners */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* img {
+    max-width: 10%;
+    height: 100px;
+} */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333; /* Dark text on light background */
+    margin: 20px;
+}
+
+#name {
+    display: flex;
+}
+
+#firstName, #lastName {
+    display: flex;
+}
+
+#btns {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#buttonContainer {
+    display: flex;
+    align-items: center;
+}
+
+/* Your existing styles here */
+
+.btn {
+    background-color: #b30000; /* Darker red color */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover state */
+.btn:hover {
+    background-color: #990000; /* Darker red color on hover */
+}
+
+/* Click animation */
+.btn:active {
+    transform: scale(0.95); /* Slight scale down on click */
+}
+
+/* Style all buttons like the "Get Another" button */
+#insertbutton,
+#flushButton,
+#selectButton {
+    background-color: #b30000; /* Darker red color */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover state */
+#insertbutton:hover,
+#flushButton:hover,
+#selectButton:hover {
+    background-color: #990000; /* Darker red color on hover */
+}
+
+/* Click animation */
+#insertbutton:active,
+#flushButton:active,
+#selectButton:active {
+    transform: scale(0.95); /* Slight scale down on click */
+}
+
+
+#searchInput {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+#formdata {
+    display: inline;
+}
+
+#apiData {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#userData {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    background-color: #fff; /* White background */
+    border: 1px solid #ccc; /* Light border color */
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle lift */
+    display: flex; /* Display the list items inline */
+}
+
+#userData li {
+    margin: 5px;
+    padding: 8px;
+    border: 1px solid #ddd; /* Light border color for each list item */
+    border-radius: 5px;
+    display: flex;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #f9f9f9; /* Light gray background */
+    color: #333; /* Dark text on light background */
+}
+
+th, td {
+    border: 1px solid #ccc; /* Lighter border color */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #b30000; /* Red color */
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f0f0f0; /* Even rows have a slightly darker background */
+}
